@@ -22,3 +22,4 @@ class MoodEntryDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return MoodEntry.objects.filter(user=self.request.user)
+#end
