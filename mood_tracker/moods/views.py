@@ -40,3 +40,28 @@ class MoodEntryListCreateView(generics.ListCreateAPIView):
         context = super().get_serializer_context()
         context.update({"request": self.request})
         return context
+
+
+# moods/views.py
+from rest_framework import generics, permissions, filters
+from rest_framework.pagination import PageNumberPagination
+from django_filters.rest_framework import DjangoFilterBackend
+from .models import MoodEntry
+from .serializers import MoodEntrySerializer
+
+# Pagination class
+class MoodEntryPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 50
+
+# List and create moods with filtering and pagination
+class MoodEntryListCreateView(generics.ListCreateAPIView):
+    queryset = MoodEntry.objects.all().order_by('-date')
+    serializer_class = MoodEntrySerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = MoodEntryPagination
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_fields = ['date', 'mood', 'user']  # filtering options
+    search_fields = ['note']  # search in notes
+    ordering_fields = ['date', 'created_at']  # ordering options
