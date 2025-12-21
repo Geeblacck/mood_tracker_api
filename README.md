@@ -78,5 +78,53 @@ source venv/bin/activate
 
 pip install -r requirements.txt
 python manage.py makemigrations
+
+
+Mood Tracker API Progress Update (12/13/2025)
+What’s New
+
+Today, the project was enhanced with authentication, validation, filtering, and pagination features to make the API more robust and user-friendly.
+
+Features Implemented
+
+User Authentication
+
+User signup and login endpoints created in the accounts app.
+
+Token-based authentication implemented for API clients (Postman, frontend apps).
+
+Mood Entry Validation
+
+Each user can only create one mood entry per day.
+
+Entries with future dates are restricted.
+
+Filtering
+
+Filter mood entries by date or mood type.
+
+Example: /api/moods/?date=2025-12-13 or /api/moods/?mood=happy.
+
+Pagination
+
+Added pagination to the moods list to handle long histories efficiently.
+
+Default page size configurable via settings.
+
+How to Test
+
+Use the DRF web interface or Postman.
+
+Authenticate using the token obtained after login.
+
+Apply filters and pagination to verify the endpoints.
+
+Next Steps
+
+Write unit and API tests for all endpoints.
+
+Add Swagger/DRF documentation for better API usability.
+
+Optional: integrate with a frontend or test API workflows in real-world scenarios.
 python manage.py migrate
 python manage.py runserver
