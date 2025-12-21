@@ -102,3 +102,17 @@ REST_FRAMEWORK = {
 
 # Redirect after login
 LOGIN_REDIRECT_URL = '/api/moods/'
+
+ALLOWED_HOSTS = ['*']  # or your-render-app.onrender.com
+
+
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    ...
+]
+
+DEBUG = False
