@@ -1,12 +1,4 @@
-from rest_framework import serializers
-from .models import MoodEntry
-
-class MoodEntrySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MoodEntry
-        fields = ['id', 'user', 'date', 'mood', 'note', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'user', 'created_at', 'updated_at']
-
+# moods/serializers.py
 
 from rest_framework import serializers
 from .models import MoodEntry
@@ -16,7 +8,7 @@ class MoodEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = MoodEntry
         fields = ['id', 'user', 'date', 'mood', 'note', 'created_at', 'updated_at']
-        read_only_fields = ['user', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'user', 'created_at', 'updated_at']
 
     def validate_date(self, value):
         """
@@ -31,12 +23,18 @@ class MoodEntrySerializer(serializers.ModelSerializer):
         Ensure that each user has only one mood entry per day.
         """
         user = self.context['request'].user
-        date = attrs.get('date')
+        date_value = attrs.get('date')
 
-        if MoodEntry.objects.filter(user=user, date=date).exists():
-            raise serializers.ValidationError("You already have a mood entry for this date.")
+        # Check for existing entry for the same user and date
+        if MoodEntry.objects.filter(user=user, date=date_value).exists():
+            raise serializers.ValidationError({
+                "non_field_errors": ["You already have a mood entry for this date."]
+            })
         return attrs
 
     def create(self, validated_data):
+        """
+        Assign the authenticated user automatically on creation.
+        """
         validated_data['user'] = self.context['request'].user
         return super().create(validated_data)
